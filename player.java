@@ -1,4 +1,8 @@
+import java.util.ArrayList;
 public class player {
+
+ArrayList<card> hand; 
+
 private int chipsAmount;
     public player() {
         chipsAmount = 0;
