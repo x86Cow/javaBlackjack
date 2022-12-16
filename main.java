@@ -9,8 +9,8 @@ class Main{
     input.nextChar()
     */
     public static void main(String[] args) {
-        player player1 = new player(100);
-        System.out.println(player1.getChipsAmount());        
+        player user = new player(100);
+        player dealer = new player(100);
         
 
         // end of program

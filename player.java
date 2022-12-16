@@ -9,4 +9,7 @@ private int chipsAmount;
     public int getChipsAmount() {
         return chipsAmount;
     }
+    public void setChipsAmount(int amount) {
+        chipsAmount = amount;
+    }
 }
