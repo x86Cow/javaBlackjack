@@ -8,12 +8,21 @@ class Main{
     input.nextBool()
     input.nextChar()
     */
+    static Player user = new Player(100);
+    Player dealer = new Player(100);
+    static Deck deck = new Deck();
     public static void main(String[] args) {
-        player user = new player(100);
-        player dealer = new player(100);
         
+        deck.shuffle();
+
+        userDrawCard();
+        System.out.println(user.getHand());
 
         // end of program
         input.close();
+    }
+    public static void userDrawCard() {
+        user.hand.add(deck.getCard(0));
+        deck.removeCard(0);
     }
 }

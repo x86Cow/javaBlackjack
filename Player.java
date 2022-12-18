@@ -1,13 +1,13 @@
 import java.util.ArrayList;
-public class player {
+public class Player {
 
-ArrayList<card> hand; 
+ArrayList<Card> hand = new ArrayList<Card>(); 
 
 private int chipsAmount;
-    public player() {
+    public Player() {
         chipsAmount = 0;
     }
-    public player(int amount) {
+    public Player(int amount) {
         chipsAmount = amount;
     }
     public int getChipsAmount() {
@@ -15,5 +15,8 @@ private int chipsAmount;
     }
     public void setChipsAmount(int amount) {
         chipsAmount = amount;
+    }
+    public ArrayList<Card> getHand() {
+        return hand;
     }
 }
