@@ -15,13 +15,16 @@ class Main{
         
         deck.shuffle();
 
-        userDrawCard();
-        System.out.println(user.getHand());
+        userDrawCard(user);
+        userDrawCard(user);
+        for(Card card: user.getHand()){
+            System.out.println(card);
+        }
 
         // end of program
         input.close();
     }
-    public static void userDrawCard() {
+    public static void userDrawCard(Player user){
         user.hand.add(deck.getCard(0));
         deck.removeCard(0);
     }
