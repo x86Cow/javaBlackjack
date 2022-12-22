@@ -12,7 +12,6 @@ private int chipsAmount;
         chipsAmount = amount;
     }
 
-
     public int getChipsAmount() {
         return chipsAmount;
     }
@@ -21,5 +20,15 @@ private int chipsAmount;
     }
     public ArrayList<Card> getHand() {
         return hand;
+    }
+    public void addCard(Card card) {
+        hand.add(card);
+    }
+    public int getHandAmount(Card card) {
+        int amount = 0;
+        for(Card cardHand: this.getHand()){
+            amount = amount + cardHand.getFace();
+        }
+        return amount;
     }
 }

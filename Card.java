@@ -1,9 +1,20 @@
 public class Card {
+
     private int suit, face;
-    public Card(int suit, int face) {
+    
+    public Card() {}
+
+    /**
+     * Constructs a card object with specified suit and face
+     * @param suit -- Suit of card (int)
+     * @param face -- Face of card (int)
+     */
+    
+     public Card(int suit, int face) {
         this.suit = suit;
         this.face = face;
     }
+   
     public int getSuit() {
         return this.suit;
     }
