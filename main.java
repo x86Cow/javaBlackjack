@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.Scanner;
 
 /** 
@@ -7,50 +8,85 @@ import java.util.Scanner;
  */
 class Main{
     static String inputResult;
+    private static final int defaultChips = 100;
     private static Scanner input = new Scanner(System.in);
-    /*
-    input.next() gets the next text up to a space
-    input.nextLine() gets the next line (up to enter)
-    input.nextInt()
-    input.nextBool()
-    input.nextChar()
-    */
-   private static Player user = new Player(100);
-   private static Player dealer = new Player(100);
-   private static Deck deck = new Deck();
-   private static Card card = new Card();
-
+    //private static Player user  = new Player();
+    private static Player dealer = new Player();
+    private static Deck deck = new Deck();
+    // private static Card card = new Card();
+    private static ArrayList<Player> players = new ArrayList<Player>();
     public static void main(String[] args) {
-     do{
+        // clear hands off all users
+        clearHand();
+
+        System.out.println("How many players are there?");
+        int numPlayers = -1;
+        do{
+            try{
+                numPlayers = Integer.parseInt(input.nextLine());
+
+                if(numPlayers < 0 || numPlayers > 10){
+                    numPlayers = -1;
+                    System.out.println("Please try again");
+                }
+            } catch(Exception e){
+                System.out.println("Please input a number");
+            }  
+        } while(numPlayers == -1);
+        
+        
+        for(int i = 0; i < numPlayers; i++) {
+            System.out.println("Player" + (i+1) + ", what's your name?");
+            String tempName = input.nextLine().trim();
+            tempName = tempName.substring(0, 1).toUpperCase() + tempName.substring(1);
+            players.add(new Player(defaultChips, tempName));
+        }
+
+
+        int tempBetAmount = -1;
+        do{
+            for(Player p : players){
+                String name = p.getName();
+                System.out.println(name + " How many chips would you like to wager?");
+                do {
+                    try{
+                        tempBetAmount = Integer.parseInt(input.nextLine());
+                        if((tempBetAmount > p.getChipsAmount()) || (tempBetAmount < 0)){
+                            System.out.println("Please input a number");
+                            tempBetAmount = -1;
+                        }
+                    } catch(Exception e){
+                        p.setBet(tempBetAmount);
+                        }
+                } while(tempBetAmount == -1);
+            }
+            //user.setBet(input.nextInt());
             deck.shuffle();
 
-            user.addCard(deck.dealTopCard());
-            user.addCard(deck.dealTopCard());
-            printHand();
+            // Deal two cards to all players
+            for(Player p : players){
+                p.addCard(deck.dealTopCard());
+                p.addCard(deck.dealTopCard());
+            }
 
-            String result = "hit";
-            do{
-                result = playerTurn(result);
+            // print Dealer Hand();
+            System.out.println("dealer hand");
+            printDealerHand();
 
-                if(user.getChipsAmount() <= 0) {
-                    System.out.println("You are out of chips!");
-                    break;
-                }
-                if(user.getHandAmount(card) > 21) {
-                    System.out.println("Bust!");
-                    break;
-                }
-            } while(result.equals("hit"));
+            for(Player p : players){
+                playerTurn(p);
+            }
 
             // end of program
         } while(playAgainOption());
+        
         input.close();
+
     }
 
-    private static void printHand() {
-        for(Card card: user.getHand()){
+    private static void printHand(Player p) {
+        for(Card card: p.getHand()){
             System.out.println(card);
-
         }
     }
     
@@ -67,19 +103,50 @@ class Main{
         return true;
     }
     /**
-     * Creates a loop if a player hits so program does not exit. 
-     * @param result
-     * @return returns result of input again
+     * Asks player if they would like to hit or stand
+     *
+     * @param p player object to be used
      */
-    private static String playerTurn(String result) {
-        System.out.println("hit or stand");
-        result = input.nextLine().toLowerCase().replaceAll(" ", "");
+    private static void playerTurn(Player p) {
+        String result;
+        do {
+            String name = p.getName();
+            System.out.println(name + " would you like to Hit or Stand");
+
+            result = input.nextLine().toLowerCase().replaceAll(" ", "");
+            //result = result.substring(0, 1).toUpperCase() + result.substring(1);
+
             switch(result){
                 case "hit":
-                    user.addCard(deck.dealTopCard());
-                    printHand();
-                    user.getHandAmount(card);
+                    p.addCard(deck.dealTopCard());
+                    printHand(p);
+                    //user.getHandAmount(card);
+                    break;
+                case "double down":
+                    //if((user.getHandAmount(card) == 9) || (user.getHandAmount(card) == 10) || (user.getHandAmount(card) == 11)) {
+                        //doubleDown();
+                    //}
+
             }
-        return result;
+        } while(result.equals("stand") == false);
+    }        
+             
+    private static void doubleDown(Player p) {
+        // user.setBet(user.getBet() * 2);
+        // TODO: write double down
+        p.addCard(deck.dealTopCard());
+    }        
+    /**
+     * Clears all hands of all players
+     */
+    private static void clearHand() {
+        for(Player p : players){
+            p.clearHand();
+        }
+    }
+    public static void printDealerHand() {
+        for(Card card: dealer.getHand()){
+            System.out.println(card);
+        }
     }
 }
