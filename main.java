@@ -153,7 +153,7 @@ class Main{
             } else {
                 result = "stand";
             }
-            if (result.equals("stand")) {}
+            if (result.equals("stand")) {
                 calculateWinner();
                 System.out.println("Dealer hits");
             }
