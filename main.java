@@ -13,7 +13,7 @@ class Main{
     //private static Player user  = new Player();
     private static Player dealer = new Player();
     private static Deck deck = new Deck();
-    // private static Card card = new Card();
+    private static Card card = new Card();
     private static ArrayList<Player> players = new ArrayList<Player>();
     public static void main(String[] args) {
         // clear hands off all users
@@ -21,6 +21,7 @@ class Main{
 
         System.out.println("How many players are there?");
         int numPlayers = -1;
+        clearHands();
         do{
             try{
                 numPlayers = Integer.parseInt(input.nextLine());
@@ -70,11 +71,16 @@ class Main{
             }
 
             // print Dealer Hand();
-            System.out.println("dealer hand");
+            dealer.addCard(deck.dealTopCard());
+            dealer.addCard(deck.dealTopCard());
+            System.out.println("dealer hand: ");
             printDealerHand();
+            System.out.println("Your hand is: ");
 
             for(Player p : players){
+                printHand(p);
                 playerTurn(p);
+                dealerTurn();
             }
 
             // end of program
@@ -116,24 +122,47 @@ class Main{
             result = input.nextLine().toLowerCase().replaceAll(" ", "");
             //result = result.substring(0, 1).toUpperCase() + result.substring(1);
 
+            if(p.getHandAmount(card) > 21) {
+                System.out.println("Bust");
+                result = "stand";
+            }
             switch(result){
                 case "hit":
                     p.addCard(deck.dealTopCard());
+                    System.out.println("Your hand is now: ");
                     printHand(p);
                     //user.getHandAmount(card);
                     break;
-                case "double down":
-                    //if((user.getHandAmount(card) == 9) || (user.getHandAmount(card) == 10) || (user.getHandAmount(card) == 11)) {
-                        //doubleDown();
-                    //}
-
+            }
+        } while(!result.equals("stand"));
+    }        
+    private static void dealerTurn() {
+        String result = "";
+        int cardAmount = dealer.getHandAmount(card);
+        do {
+            if(cardAmount < 17){
+                dealer.addCard(deck.dealTopCard());
+                printDealerHand();
+                cardAmount = dealer.getHandAmount(card);
+            } else if(cardAmount > 21){
+                System.out.println("Dealer busts");
+                result = "stand";
+            } else if(cardAmount == 21){
+                System.out.println("Dealer has 21");
+                result = "stand";
+            } else {
+                result = "stand";
+            }
+            if (result.equals("stand") == true) {
+                calculateWinner();
+                System.out.println("Dealer hits");
             }
         } while(result.equals("stand") == false);
-    }        
+    }
              
+    // TODO: write double down
     private static void doubleDown(Player p) {
         // user.setBet(user.getBet() * 2);
-        // TODO: write double down
         p.addCard(deck.dealTopCard());
     }        
     /**
@@ -144,9 +173,40 @@ class Main{
             p.clearHand();
         }
     }
-    public static void printDealerHand() {
+    private static void printDealerHand() {
         for(Card card: dealer.getHand()){
             System.out.println(card);
         }
+    }
+    private static void calculateWinner() {
+        if(dealer.getHandAmount(card) > 21){
+            for(Player p : players){
+                if(p.getHandAmount(card) > 21){
+                    // tie
+                } else {
+                    // player wins
+                    System.out.println(p.getName() + " wins");
+
+                }
+            }
+        } else {
+            for(Player p : players){
+                if(p.getHandAmount(card) > 21){
+                    // dealer wins
+                } else if(p.getHandAmount(card) > dealer.getHandAmount(card)){
+                    // player wins
+                } else if(p.getHandAmount(card) < dealer.getHandAmount(card)){
+                    // dealer wins
+                } else {
+                    // tie
+                }
+            }
+        }
+    }
+    private static void clearHands() {
+        for(Player p : players){
+            p.clearHand();
+        }
+        dealer.clearHand();
     }
 }
