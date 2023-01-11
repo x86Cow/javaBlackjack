@@ -1,6 +1,7 @@
 public class Card {
 
-    private int suit, face;
+    private int suit;
+    private int face;
     
     public Card() {}
 
