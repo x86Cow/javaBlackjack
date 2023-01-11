@@ -153,11 +153,11 @@ class Main{
             } else {
                 result = "stand";
             }
-            if (result.equals("stand") == true) {
+            if (result.equals("stand")) {}
                 calculateWinner();
                 System.out.println("Dealer hits");
             }
-        } while(result.equals("stand") == false);
+        } while(!result.equals("stand"));
     }
              
     // TODO: write double down
